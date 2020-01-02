@@ -1,0 +1,38 @@
+### PYTHON ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env_docs/
+
+### Sphinx ###
+_build/
+_templates/
+_static/
+
+### DJANGO ###
+# Django Database Files
+db.sqlite3
+*.sqlite3-journal
+
+# Excluding Django Static Folder
+static/
+
+### Operating Systems ###
+# macOS
+.DS_Store

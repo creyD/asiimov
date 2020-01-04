@@ -1,6 +1,6 @@
 # Asiimov
 
-A free, open source CS:GO item trading platform.
+A free, intuitive, open source CS:GO item trading platform.
 
 ## Goals
 

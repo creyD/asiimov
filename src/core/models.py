@@ -21,7 +21,7 @@ class ItemType(models.model):
     classid = models.IntegerField()  # Weapon Class
     appid = models.IntegerField()  # The appid which items of this type belong to
 
-    market_tradable_restriction = models.IntegerField()  # How long the item will be trade locked
+    tradable = models.BooleanField(default=False)  # Wether the item is tradable or not
     icon_url = models.URLField(max_length=512, null=True)
     name = models.CharField(max_length=1000)  # i.e. ★ Butterfly Knife
     name_color = models.CharField(max_length=7)  # Hexadecimal color of the name
@@ -41,7 +41,7 @@ class Stickers(models.model):
 class ItemInstance(models.model):
     item_class = models.ForeignKey(ItemType, on_delete=models.PROTECT)
     instanceid = models.IntegerField(primary_key=True, unique=True)  # 0 for something like cases, which will be excluded here
-    tradable = models.BooleanField(default=False)
+    market_tradable_restriction = models.IntegerField()  # How long the item will be trade locked
     inspect_link = models.URLField(max_length=512, null=True)
     wear = models.CharField(max_length=100)  # tags > category = exterior > localized_tag_name
     float = models.FloatField()  # Float of the object

@@ -13,6 +13,7 @@ A free, intuitive, open source CS:GO item trading platform.
 - Everything is available for free (given you login with steam and provide the api key
 - Items should be displayed with: Item ID, Inspect Link, Pattern Index (...) NO PRICES! We don't want to anger Valve!
 - Simple user design, minimalistic, less pages more features
+- (optional) You can mark your inventory items as "for trade" or "holding on to this"
 
 Additional features and goals will be tracked in this repositories issues.
 

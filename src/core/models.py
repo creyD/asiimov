@@ -15,7 +15,7 @@ BADGE_RARITIES = [
 
 # MODELS
 # Storing the classes of items for quick selection in some menues
-class ItemType(models.model):
+class ItemType(models.Model):
     paint_index = models.IntegerField(primary_key=True, unique=True)  # Skin
 
     classid = models.IntegerField()  # Weapon Class
@@ -32,13 +32,13 @@ class ItemType(models.model):
 
 
 # Class for storing stickers applied to weapons
-class Stickers(models.model):
+class Stickers(models.Model):
     stickerid = models.IntegerField(primary_key=True, unique=True)
-    name = models.CharField()
+    name = models.CharField(max_length=1000)
 
 
 # Storing the single instances of items
-class ItemInstance(models.model):
+class ItemInstance(models.Model):
     item_class = models.ForeignKey(ItemType, on_delete=models.PROTECT)
     instanceid = models.IntegerField(primary_key=True, unique=True)  # 0 for something like cases, which will be excluded here
     market_tradable_restriction = models.IntegerField()  # How long the item will be trade locked
@@ -48,19 +48,19 @@ class ItemInstance(models.model):
     paintseed = models.IntegerField()  # Pattern ID
     killeatervalue = models.IntegerField(null=True)  # StatTrack
     customname = models.CharField(max_length=128, null=True)  # Nametag
-    stickers = models.ManyToManyField()
+    stickers = models.ManyToManyField(Stickers)
 
 
 # Badges that can be eared on the site
-class Badge(models.model):
+class Badge(models.Model):
     name = models.CharField(max_length=256, unique=True)
     desc = models.CharField(max_length=1000)
     icon = models.FileField(upload_to='badge_icons/')
-    rarity = models.CharField(choices=BADGE_RARITIES, default=1)
+    rarity = models.CharField(choices=BADGE_RARITIES, default=1, max_length=10)
 
 
 # For storing user info like steamID (...)
-class Gamer(models.model):
+class Gamer(models.Model):
     steamid = models.IntegerField(primary_key=True, unique=True)  # This is a maximum of 32 chars long
 
     # https://developer.valvesoftware.com/wiki/Steam_Web_API#GetPlayerSummaries_.28v0002.29

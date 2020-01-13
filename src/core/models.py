@@ -85,12 +85,18 @@ class Gamer(models.Model):
     system_user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
-
 class Offer(models.Model):
     offeror = models.ForeignKey(Gamer, on_delete=models.CASCADE)
     items_give = models.ManyToManyField(ItemInstance, related_name='OfferedItems')
     items_want = models.ManyToManyField(ItemInstance, related_name='WantedItems')
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        # TODO: Get Data of the user before this step
+        Gamer.objects.get_or_create(system_user=instance)
 
 
 @receiver(post_save, sender=User)

@@ -9,7 +9,11 @@ urlpatterns = [
     path('offers/<int:offerID>/refresh', views.offer_refresh, name='offer_refresh'),
     path('offers/<int:offerID>', views.offer_delete, name='offer_delete'),
     path('offers/create', views.offer_create, name='offer_create'),
+    path('search/<str:filter>', views.search, name='search'),
     path('profile/<int:steamID>', views.profile, name='profile'),
-    path('profile/<int:steamID>/settings', views.profile_settings, name='profile_settings'),
-    path('search/<str:filter>', views.search, name='search')
+    path('profile/me', views.me, name='me'),
+    path('profile/settings', views.me_settings, name='me_settings'),
+
+    path('help', views.help, name='help'),
+    path('imprint', views.imprint, name='imprint')
 ]

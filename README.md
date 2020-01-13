@@ -6,7 +6,7 @@ A free, intuitive, open source CS:GO item trading platform.
 
 - You can authenticate with your steam account
 - You can create 'offers' using your items as a base
-- A border color indicates if the item is still in your inventory
+- A border colour indicates if the item is still in your inventory
 - You can manually renew a offer page to check if the item is still in the inventory (if we knew the api key)
 - You can send trade offers (preferably with the items preselected or even completely automated)
 - You have a profile with some badges to get your profile semi verified (email, steam api key, trade link)

@@ -45,7 +45,7 @@ We use a pretty simple and intuitive branching structure:
 - `hotfix-X` - Is a branch where security or major issues are worked on, they will be merged into `master` and `dev`
 - `feature-X` - Is a branch where a specific feature is worked on, will be merged into `dev`
 
-If you fork this repository, you are most likely working in the `dev` branch and creating a pull request from your `dev` to our `dev`.
+If you fork this repository and want to help us you will most likely work in the `dev` branch and create a pull request from your `dev` to our `dev`.
 
 ## Contribution Guide
 

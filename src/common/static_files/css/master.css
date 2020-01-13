@@ -1,0 +1,48 @@
+html, body{
+    height: 100%;
+    width: 100%;
+}
+
+.hidden{
+	display: none;
+}
+
+a{
+  text-decoration: none;
+  color: #AA3B07;
+}
+
+a:visited{
+  text-decoration: none;
+  color: #AA3B07;
+}
+
+a:active{
+  text-decoration: none;
+  color: #AA3B07;
+}
+
+nav{
+  width: 100vw;
+  height: 5vh;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.nav_box{
+  position: relative;
+  padding-top: .5vh;
+  padding-bottom: .5vh;
+}
+
+#left_nav{
+  padding-left: 5vw;
+  text-align: left;
+  float: left;
+}
+
+#right_nav{
+  padding-right: 5vw;
+  text-align: right;
+  float: right;
+}

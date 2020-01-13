@@ -1,12 +1,39 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Asiimov - CS:GO Trading Website</title>
+    <title>{% block title %}{% endblock %}</title>
+  	<!-- Viewport for a pleasant mobile experience -->
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<!-- Charset for compatability and stability -->
+  	<meta charset="utf-8">
+  	<!-- Description for right SE indexing -->
+  	<meta name="Description" content="Trading Platform Open Source CS:GO">
+  	<!-- Load the default master.css for some values -->
+  	<link rel="stylesheet" href="{% static 'css/master.css' %}">
+  	<!-- JQuery for easier HTML manipulation -->
+  	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   </head>
+
   <body>
-    <div id="header"></div>
-    {% block content %}{% endblock %}
-    <div id="footer">
+    <nav>
+      <div id="left_nav" class="nav_box">
+        <a href="{% url 'home' %}">Asiimov</a> | <a href="">Filter</a>
+      </div>
+      <div id="right_nav" class="nav_box">
+        {% if user.is_authenticated %}
+          <a href="{% url 'offer_create' %}">Add Offer</a> | <a href="{% url 'me_settings' %}">settings</a> | Welcome, <a href="{% url 'me' %}">{{ user.gamer.display_name }}</a>
+        {% else %}
+          <a href=""><img src="{% static 'pic/steam_sign_in.png' %}" /></a>
+        {% endif %}
+      </div>
+    </nav>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <div id="footer" style="text-align:center">
       <a href="https://github.com/creyD/asiimov" target="_blank">GitHub</a>.<a href="{% url 'imprint' %}">Imprint</a>.<a href="{% url 'help' %}">Help</a>
     </div>
   </body>

@@ -88,8 +88,8 @@ class Gamer(models.Model):
 
 class Offer(models.Model):
     offeror = models.ForeignKey(Gamer, on_delete=models.CASCADE)
-    items_give = models.ManyToManyField(ItemInstance)
-    items_want = models.ManyToManyField(ItemInstance)
+    items_give = models.ManyToManyField(ItemInstance, related_name='OfferedItems')
+    items_want = models.ManyToManyField(ItemInstance, related_name='WantedItems')
     created_at = models.DateTimeField(auto_now_add=True)
 
 

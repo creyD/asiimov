@@ -53,7 +53,7 @@ ROOT_URLCONF = 'asiimov.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'common', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -19,8 +19,9 @@ In most cases the best thing you can do is to create an issue with your contribu
 If you feel like the issue is easily fixable for you and the consensus of the issue is positive for your idea, go for it!
 
 - Fork the repository
+- Checkout the dev branch
 - Commit your changes with an understandable commit message
-- Create a pull request from your fork to the main repository (preferably in the dev branch!)
+- Create a pull request from your fork to the main repository (from your branch to the `dev` branch)
 - Profit!
 
 ## Which branch should I push to?

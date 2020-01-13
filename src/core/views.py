@@ -3,15 +3,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 
+
 # STATIC PAGES
-
-
 def help(request):
-    return render(request, 'core/help.html')
+    return render(request, 'static_pages/help.html')
 
 
 def imprint(request):
-    return render(request, 'core/imprint.html')
+    return render(request, 'static_pages/imprint.html')
+
+
+def about(request):
+    return render(request, 'static_pages/about.html')
 
 
 # PUBLIC AREA

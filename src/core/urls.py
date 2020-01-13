@@ -15,5 +15,6 @@ urlpatterns = [
     path('profile/settings', views.me_settings, name='me_settings'),
 
     path('help', views.help, name='help'),
-    path('imprint', views.imprint, name='imprint')
+    path('imprint', views.imprint, name='imprint'),
+    path('about', views.about, name='about')
 ]

@@ -13,7 +13,8 @@ BADGE_RARITIES = [
 ]
 
 
-# MODELS
+# STEAM MIRROR MODELS
+# -- Models that mirror parts of the steam inventory system --
 # Storing the classes of items for quick selection in some menues
 class ItemType(models.Model):
     paint_index = models.IntegerField(primary_key=True, unique=True)  # Skin
@@ -59,6 +60,8 @@ class Badge(models.Model):
     rarity = models.CharField(choices=BADGE_RARITIES, default=1, max_length=10)
 
 
+# ASIIMOV MODELS
+# -- Models that are explicitly for our site --
 # For storing user info like steamID (...)
 class Gamer(models.Model):
     steamid = models.IntegerField(primary_key=True, unique=True)  # This is a maximum of 32 chars long
@@ -80,6 +83,14 @@ class Gamer(models.Model):
     API_KEY = models.CharField(max_length=32, null=True)  # Optionally use the API KEY of the user
     badges = models.ManyToManyField(Badge)
     system_user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+
+class Offer(models.Model):
+    offeror = models.ForeignKey(Gamer, on_delete=models.CASCADE)
+    items_give = models.ManyToManyField(ItemInstance)
+    items_want = models.ManyToManyField(ItemInstance)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_save, sender=User)

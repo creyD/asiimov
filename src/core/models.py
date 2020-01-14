@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # For catching the save method for keeping user objects in sync
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .steam_api import getUserInfo
 
 # CHOICE HELPERS
 BADGE_RARITIES = [

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # For catching the save method for keeping user objects in sync
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .steam_api import getUserInfo
+
 
 # CHOICE HELPERS
 BADGE_RARITIES = [
@@ -91,13 +91,6 @@ class Offer(models.Model):
     items_give = models.ManyToManyField(ItemInstance, related_name='OfferedItems')
     items_want = models.ManyToManyField(ItemInstance, related_name='WantedItems')
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        # TODO: Get Data of the user before this step
-        Gamer.objects.get_or_create(system_user=instance)
 
 
 @receiver(post_save, sender=User)

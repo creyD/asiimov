@@ -2,6 +2,8 @@ from .models import Offer, Gamer
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+# For Steam Open ID handling
+from oic.oic import Client
 
 
 # STATIC PAGES
@@ -34,6 +36,17 @@ def offer(request, offerID):
 def search(request, filter):
     # TODO: Implement
     return render(request, 'core/filter.html')
+
+
+# USER SIGNUP
+def signup(request):
+    client = Client()
+    issuer = client.discover('https://steamcommunity.com/openid/login')
+    #provider_info = client.provider_config(issuer)
+    context = {
+        'url': issuer
+    }
+    return render(request, 'core/signup.html', context)
 
 
 # USER AREA

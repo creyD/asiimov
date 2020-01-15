@@ -24,7 +24,7 @@
         {% if user.is_authenticated %}
           <a href="{% url 'offer_create' %}">Add Offer</a> | <a href="{% url 'me_settings' %}">settings</a> | Welcome, <a href="{% url 'me' %}">{{ user.gamer.display_name }}</a>
         {% else %}
-          <a href=""><img src="{% static 'pic/steam_sign_in.png' %}" /></a>
+          <a href="{% url 'signup' %}"><img src="{% static 'pic/steam_sign_in.png' %}" /></a>
         {% endif %}
       </div>
     </nav>

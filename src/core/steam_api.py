@@ -8,6 +8,8 @@ STEAM_SERVER = 'https://api.steampowered.com/'
 USER_METHOD = 'ISteamUser/GetPlayerSummaries/v2'
 INVENTORY_SERVER = 'https://steamcommunity.com/inventory/'
 
+FLOAT_SERVER = 'https://api.csgofloat.com/?url='
+
 
 # Get the mandatory gamer info for a gamer
 def getUserInfo(steamID, API_KEY=settings.STEAM_API_KEY):
@@ -21,3 +23,8 @@ def getUserInventory(steamID, API_KEY=settings.STEAM_API_KEY, GAME_ID=730):
     QUERY = INVENTORY_SERVER + '/' + steamID + '/' + GAME_ID + '/2?l=english&count=5000'
     inventory_object = json.load(urllib.request.urlopen(QUERY))
     return inventory_object
+
+
+def getFloat(asset, steamID):
+    QUERY = FLOAT_SERVER + asset.getInspectLink()
+    return json.load(urllib.request.urlopen(QUERY))

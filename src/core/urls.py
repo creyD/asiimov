@@ -18,5 +18,6 @@ urlpatterns = [
     path('imprint', views.imprint, name='imprint'),
     path('about', views.about, name='about'),
 
-    path('signup', views.signup, name='signup')
+    path('signup', views.signup, name='signup'),
+    path('signup_confirm', views.signup_confirm)
 ]

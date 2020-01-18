@@ -107,4 +107,5 @@ class Offer(models.Model):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.gamer.save()
+    if Gamer.objects.filter(system_user=instance).exists():
+        instance.gamer.save()

@@ -52,6 +52,18 @@ class ItemInstance(models.Model):
     customname = models.CharField(max_length=128, null=True)  # Nametag
     stickers = models.ManyToManyField(Stickers)
 
+    def getInspectLink(self):
+        if self.getOwner():
+            fresh_link = self.inspect_link
+            link = fresh_link.replace("%owner_steamid%", self.getOwner().steamid).replace("%assetid%", self.instanceid)
+            return link
+        return False
+
+    def getOwner(self):
+        if Gamer.objects.filter(inventory__contains=self).exists():
+            return Gamer.objects.filter(inventory__contains=self)[0]
+        return False
+
 
 # Badges that can be eared on the site
 class Badge(models.Model):
@@ -95,4 +107,5 @@ class Offer(models.Model):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.gamer.save()
+    if Gamer.objects.filter(system_user=instance).exists():
+        instance.gamer.save()

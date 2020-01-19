@@ -13,7 +13,7 @@ import requests
 # For manually creating system users
 from django.contrib.auth.models import User
 # For getting the API interaction methods
-from .steam_api import getUserInfo
+from .steam_api import getUserInfo, updateInventory
 # Import for manually logging in user after creation
 from django.contrib.auth import login
 
@@ -138,6 +138,12 @@ def profile(request, steamID):
 
 
 @login_required
+def profile_inventory(request, steamID):
+    dude = get_object_or_404(Gamer, steamid=steamID)
+    return render(request, 'profile/inventory.html', {'gamer': dude})
+
+
+@login_required
 def profile_update(request, steamID):
     if (request.user.steamid == steamID and request.user.gamer.API_KEY) or request.user.is_staff:
         the_gamer = get_object_or_404(Gamer, steamid=steamID)
@@ -160,8 +166,18 @@ def profile_update(request, steamID):
 # PRIVATE AREA
 @login_required
 def me(request):
-    dude = get_object_or_404(Gamer, steamid=request.user.gamer.steamid)
-    return render(request, 'profile/profile.html', {'gamer': dude, 'live_offers': Offer.objects.filter(offeror=dude).count()})
+    return redirect(profile, steamID=request.user.gamer.steamid)
+
+
+@login_required
+def me_inventory(request):
+    return redirect(profile_inventory, steamID=request.user.gamer.steamid)
+
+
+@login_required
+def profile_inventory_update(request, steamID):
+    updateInventory(steamID)
+    return redirect(profile_inventory, steamID=steamID)
 
 
 @login_required

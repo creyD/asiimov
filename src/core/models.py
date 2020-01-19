@@ -29,8 +29,8 @@ class ItemType(models.Model):
     name_color = models.CharField(max_length=7)  # Hexadecimal color of the name
     type = models.CharField(max_length=1000)  # i.e. ★ Covert Knife
     rarity = models.CharField(max_length=1000)  # tags > category = rarity > localized_tag_name
-    min_float = models.FloatField()
-    max_float = models.FloatField()
+    min_float = models.FloatField(null=True)  # At creation time there is no data, so we need null=True
+    max_float = models.FloatField(null=True)  # At creation time there is no data, so we need null=True
 
 
 # Class for storing stickers applied to weapons
@@ -43,13 +43,13 @@ class Stickers(models.Model):
 class ItemInstance(models.Model):
     item_class = models.ForeignKey(ItemType, on_delete=models.PROTECT)
     instanceid = models.IntegerField(primary_key=True, unique=True)  # 0 for something like cases, which will be excluded here
-    market_tradable_restriction = models.IntegerField()  # How long the item will be trade locked
-    inspect_link = models.URLField(max_length=512, null=True)
+    market_tradable_restriction = models.CharField(max_length=1, null=True)  # How long the item will be trade locked | null is not tradelocked
+    inspect_link = models.URLField(max_length=512)
     wear = models.CharField(max_length=100)  # tags > category = exterior > localized_tag_name
     float = models.FloatField()  # Float of the object
     paintseed = models.IntegerField()  # Pattern ID
-    killeatervalue = models.IntegerField(null=True)  # StatTrack
-    customname = models.CharField(max_length=128, null=True)  # Nametag
+    killeatervalue = models.IntegerField(null=True)  # StatTrack | null is no StatTrack
+    customname = models.CharField(max_length=128, null=True)  # Nametag | null is no Nametag
     stickers = models.ManyToManyField(Stickers)
 
     def getInspectLink(self):
@@ -87,7 +87,7 @@ class Gamer(models.Model):
     avatar = models.URLField(max_length=256)
     commentpermission = models.BooleanField()  # If set, profile allows public comments
 
-    # Optional Fields (only available if public profile)
+    # Optional Fields (only available if public profile else null)
     timecreated = models.IntegerField(null=True)  # Only visible if user has profile visibility
     loccountrycode = models.CharField(max_length=2, null=True)  # 2 char ISO country code
 

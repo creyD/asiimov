@@ -1,0 +1,24 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block header %}
+<!-- Adding custom style sheet for profile-->
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content_block">
+  <h3>{{ gamer.personaname }} - Inventory</h3>
+
+  {% if request.user.gamer == gamer %}<p><a href="{% url 'profile_inventory_update' gamer.steamid %}">Refresh Inventory Data</a></p>{% endif %}
+
+  {% for item in gamer.inventory.all %}
+    <div>
+      <h4 style="color: #{{ item.item_class.name_color }}">item.item_class.name</h4>
+      <p></p>
+    </div>
+  {% empty %}
+    No Invetory Data!
+  {% endfor %}
+</div>
+{% endblock %}

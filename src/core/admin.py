@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ItemType, Stickers, ItemInstance, Badge, Gamer
+from .models import ItemType, ItemInstance, Badge, Gamer
 
 
 # Register your models here.
@@ -10,5 +10,15 @@ class ItemTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(Gamer)
-class Gamer(admin.ModelAdmin):
+class GamerAdmin(admin.ModelAdmin):
     list_display = ('steamid', 'communityvisibilitystate', 'profilestate', 'personaname', 'commentpermission', 'timecreated', 'loccountrycode')
+
+
+@admin.register(ItemInstance)
+class ItemInstanceAdmin(admin.ModelAdmin):
+    list_display = ('item_class', 'instanceid', 'market_tradable_restriction', 'inspect_link', 'wear', 'float', 'paintseed', 'killeatervalue', 'customname')
+
+
+@admin.register(Badge)
+class BadgeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'desc', 'icon', 'rarity')

@@ -27,7 +27,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'core',
     'django.contrib.admin',
@@ -71,7 +70,6 @@ WSGI_APPLICATION = 'asiimov.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -82,7 +80,6 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -101,7 +98,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -119,3 +115,10 @@ STATICFILES_DIRS = [
 
 # Steam API variables
 STEAM_API_KEY = os.environ['STEAM_API_KEY']
+
+# Redirect for users to login
+LOGIN_URL = 'signup'
+# Redirect after login
+LOGIN_REDIRECT_URL = 'me'
+# Redirect after logout
+LOGOUT_REDIRECT_URL = 'home'

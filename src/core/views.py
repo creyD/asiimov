@@ -17,6 +17,8 @@ from .steam_api import getUserInfo
 # Import for manually logging in user after creation
 from django.contrib.auth import login
 
+from .forms import ChangeTradeUrl
+
 
 # HELPER
 def validate_steam_login(params):
@@ -92,14 +94,14 @@ def signup_confirm(request):
             Gamer.objects.create(
                 steamid=claimed_id,
                 system_user=new_user,
-                communityvisibilitystate=(True if info['response']['players'][0]['communityvisibilitystate'] == 3 else False),
-                profilestate=info['response']['players'][0]['profilestate'],
-                personaname=info['response']['players'][0]['personaname'],
-                profileurl=info['response']['players'][0]['profileurl'],
-                avatar=info['response']['players'][0]['avatar'],
-                commentpermission=info['response']['players'][0]['commentpermission'],
-                timecreated=info['response']['players'][0]['timecreated'] or None,
-                loccountrycode=info['response']['players'][0]['loccountrycode'] or None
+                communityvisibilitystate=(True if info['communityvisibilitystate'] == 3 else False),
+                profilestate=info['profilestate'],
+                personaname=info['personaname'],
+                profileurl=info['profileurl'],
+                avatar=info['avatar'],
+                commentpermission=info['commentpermission'],
+                timecreated=info['timecreated'] or None,
+                loccountrycode=info['loccountrycode'] or None
             )
         login(request, new_user)
         return redirect(me)
@@ -132,16 +134,41 @@ def offer_create(request):
 @login_required
 def profile(request, steamID):
     dude = get_object_or_404(Gamer, steamid=steamID)
-    return render(request, 'core/profile.html', {'gamer': dude})
+    return render(request, 'profile/profile.html', {'gamer': dude, 'live_offers': Offer.objects.filter(offeror=dude).count()})
 
+
+@login_required
+def profile_update(request, steamID):
+    if (request.user.steamid == steamID and request.user.gamer.API_KEY) or request.user.is_staff:
+        the_gamer = get_object_or_404(Gamer, steamid=steamID)
+        info = getUserInfo(steamID, API_KEY=request.user.gamer.API_KEY or None)
+        the_gamer.communityvisibilitystate = (True if info['communityvisibilitystate'] == 3 else False)
+        the_gamer.profilestate = info['profilestate']
+        the_gamer.personaname = info['personaname']
+        the_gamer.profileurl = info['profileurl']
+        the_gamer.avatar = info['avatar']
+        the_gamer.commentpermission = info['commentpermission']
+        if 'timecreated' in info:
+            the_gamer.timecreated = info['timecreated']
+        if 'loccountrycode' in info:
+            the_gamer.loccountrycode = info['loccountrycode']
+        the_gamer.save()
+        return redirect(profile, steamID=steamID)
+    else:
+        return HttpResponseForbidden()
 
 # PRIVATE AREA
 @login_required
 def me(request):
-    return render(request, 'core/profile.html', {'gamer': Gamer.objects.get(system_user=request.user)})
+    dude = get_object_or_404(Gamer, steamid=request.user.gamer.steamid)
+    return render(request, 'profile/profile.html', {'gamer': dude, 'live_offers': Offer.objects.filter(offeror=dude).count()})
 
 
 @login_required
 def me_settings(request):
     dude = get_object_or_404(Gamer, system_user=request.user)
-    return render(request, 'core/settings.html', {'gamer': dude})
+    trade_form = ChangeTradeUrl(request.POST or None, instance=dude)
+    if trade_form.is_valid() and request.method == 'POST':
+        dude.tradeurl = trade_form.cleaned_data['trade_url']
+        dude.save()
+    return render(request, 'profile/settings.html', {'gamer': dude, 'form': trade_form})

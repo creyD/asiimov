@@ -91,11 +91,14 @@ class Gamer(models.Model):
     timecreated = models.IntegerField(null=True)  # Only visible if user has profile visibility
     loccountrycode = models.CharField(max_length=2, null=True)  # 2 char ISO country code
 
+    tradeurl = models.URLField(max_length=256, null=True)
+
     # Asiimov specific information
     inventory = models.ManyToManyField(ItemInstance)  # Temporary storage of items for improving site performance
     API_KEY = models.CharField(max_length=32, null=True)  # Optionally use the API KEY of the user
     badges = models.ManyToManyField(Badge)
     system_user = models.OneToOneField(User, on_delete=models.CASCADE)
+    offer_count = models.IntegerField(default=0)
 
 
 class Offer(models.Model):

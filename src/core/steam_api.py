@@ -15,7 +15,7 @@ FLOAT_SERVER = 'https://api.csgofloat.com/?url='
 def getUserInfo(steamID, API_KEY=settings.STEAM_API_KEY):
     QUERY = STEAM_SERVER + USER_METHOD + '/?key=' + str(API_KEY) + '&format=json&steamids=' + str(steamID)
     player_object = json.load(urllib.request.urlopen(QUERY))
-    return player_object
+    return player_object['response']['players'][0]
 
 
 # Get the CS:GO inventory of a gamer

@@ -1,0 +1,43 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block header %}
+<!-- Adding custom style sheet for profile-->
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content_block">
+  <p><img src="{{ gamer.avatar }}" /></p>
+  <h2>{{ gamer.personaname }} {% if request.user.gamer == gamer %}(Your Profile){% endif %}</h2>
+
+  <h3>Links</h3>
+  <ul>
+    <a href="{{ gamer.profileurl }}" target="_blank"><li>Steam</li></a>
+    <a href="http://csgo.exchange/id/{{ gamer.steamid }}"><li>csgo.exchange</li></a>
+    {% if gamer.tradeurl %}<a href="{{ gamer.tradeurl }}" target="_blank"><li>Trade</li></a>{% endif %}
+  </ul>
+
+  <h3>Info</h3>
+  <p>Steam ID: {{ gamer.steamid }}</p>
+  <p>Profile: {% if gamer.profilestate %}Public Profile{% else %}Private Profile{% endif %}</p>
+  <p>Comments: {% if gamer.commentpermission %}Allowed{% else %}Denied{% endif %}</p>
+  <p>Locale: {% if gamer.loccountrycode %}{{ gamer.loccountrycode }}{% else %}Not provided{% endif %}</p>
+  {% if gamer.API_KEY %}<p style="color: red">This is an API Key Sponsor!</p>{% endif %}
+
+  <h3>Badges</h3>
+  <p>
+  {% for badge in gamer.badges.all %}
+    <img src="{{ badge.icon }}" placeholder="{{ badge.name }}">
+  {% empty %}
+    No badges earned yet.
+  {% endfor %}
+  </p>
+
+  <h3>Statistics</h3>
+  <p>Offers created: {{ gamer.offer_count }}</p>
+  <p>Live Offers: {{ live_offers }}</p>
+  <p>Member since: {{ gamer.system_user.date_joined }}</p>
+  <p>Last Login: {{ gamer.system_user.last_login }}</p>
+</div>
+{% endblock %}

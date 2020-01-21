@@ -1,0 +1,10 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<h1>Create Offer</h1>
+<form role="from" method="post" action="{% url 'offer_create' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Offer</button>
+</form>
+{% endblock %}

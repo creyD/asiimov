@@ -17,7 +17,7 @@ from .steam_api import getUserInfo, updateInventory
 # Import for manually logging in user after creation
 from django.contrib.auth import login
 
-from .forms import ChangeTradeUrl
+from .forms import ChangeTradeUrl, CreateOffer
 
 
 # HELPER
@@ -104,7 +104,7 @@ def signup_confirm(request):
                 loccountrycode=info['loccountrycode'] or None
             )
         login(request, new_user)
-        return redirect(me)
+        return redirect(profile, steamID=claimed_id)
     return HttpResponseForbidden()
 
 
@@ -112,6 +112,7 @@ def signup_confirm(request):
 @login_required
 def offer_refresh(request, offerID):
     offer = get_object_or_404(Offer, id=offerID)
+    # TODO Refresh Info
     return redirect(offer, offerID=offerID)
 
 
@@ -121,14 +122,21 @@ def offer_delete(request, offerID):
     if request.user == offer.offeror.system_user:
         offer.delete()
         return redirect(dashboard)
-    else:
-        return HttpResponseForbidden()
+    return HttpResponseForbidden()
 
 
 @login_required
 def offer_create(request):
-    # TODO: Implement
-    return render(request, 'core/offer_create.html')
+    form = CreateOffer(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        form.offeror = request.user.gamer
+        form.save()
+    dude = get_object_or_404(Gamer, steamid=request.user.gamer)
+    context = {
+        'inventory': dude.inventory,
+        'form': form
+    }
+    return render(request, 'core/offer_create.html', context)
 
 
 @login_required
@@ -160,8 +168,8 @@ def profile_update(request, steamID):
             the_gamer.loccountrycode = info['loccountrycode']
         the_gamer.save()
         return redirect(profile, steamID=steamID)
-    else:
-        return HttpResponseForbidden()
+    return HttpResponseForbidden()
+
 
 # PRIVATE AREA
 @login_required

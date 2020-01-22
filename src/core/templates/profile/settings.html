@@ -1,21 +1,23 @@
-{% extends 'master.html' %} {% load static %} {% block header %}
+{% extends 'master.html' %}
+{% load static %}
+
+{% block header %}
 <!-- Adding custom style sheet for profile-->
 <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <div class="content_block">
   <h2>Settings</h2>
-  <a
-    href="http://steamcommunity.com/id/me/tradeoffers/privacy#trade_offer_access_url"
-    target="_blank"
-    >Find your trade URL!</a
-  >
-  <a href="{% url 'profile_update' gamer.steamid %}"
-    >Synchronize profile from Steam</a
-  >
+  <h3>Trade URL</h3>
+  <p><a href="http://steamcommunity.com/id/me/tradeoffers/privacy#trade_offer_access_url" target="_blank">Find your trade URL!</a></p>
 
   <form role="from" method="post" action="{% url 'me_settings' %}">
     {% csrf_token %} {{ form.as_p }}
     <button type="submit">Set Trade URL</button>
   </form>
+
+  <h3>Other</h3>
+  <p><a href="{% url 'profile_update' gamer.steamid %}">Synchronize profile from Steam</a></p>
 </div>
 {% endblock %}

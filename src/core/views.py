@@ -189,6 +189,6 @@ def me_settings(request):
     dude = get_object_or_404(Gamer, system_user=request.user)
     trade_form = ChangeTradeUrl(request.POST or None, instance=dude)
     if trade_form.is_valid() and request.method == 'POST':
-        dude.tradeurl = trade_form.cleaned_data['trade_url']
+        dude.tradeurl = trade_form.cleaned_data['tradeurl']
         dude.save()
     return render(request, 'profile/settings.html', {'gamer': dude, 'form': trade_form})

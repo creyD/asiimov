@@ -127,7 +127,7 @@ def offer_create(request):
     if request.method == 'POST' and form.is_valid():
         form.offeror = request.user.gamer
         form.save()
-    dude = get_object_or_404(Gamer, steamid=request.user.gamer)
+    dude = get_object_or_404(Gamer, steamid=request.user.gamer.steamid)
     context = {
         'inventory': dude.inventory,
         'form': form

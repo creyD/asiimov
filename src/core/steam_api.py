@@ -6,10 +6,12 @@ from django.conf import settings
 from .models import Gamer, ItemType, ItemInstance
 from django.shortcuts import get_object_or_404
 
+# Official Steam Servers
 STEAM_SERVER = 'https://api.steampowered.com/'
 USER_METHOD = 'ISteamUser/GetPlayerSummaries/v2'
 INVENTORY_SERVER = 'https://steamcommunity.com/inventory/'
 
+# CSGOFloats API Server (https://csgofloat.com)
 FLOAT_SERVER = 'https://api.csgofloat.com/?url='
 
 

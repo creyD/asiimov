@@ -19,8 +19,7 @@ Additional features and goals will be tracked in this repositories issues.
 
 ## Pages
 
-- Home Page (for people who aren't signed in)
-- Overview Page (for people who are signed in, live feed of created trades)
+- Home Page (w/ live feed of created offers)
 - `/offer/<offerID>` - Offer page (for each offer)
 - `/offer/<offerID>/refresh` - Refreshes offer page
 - `/profile/<steamID>` - Profile page for badges, confirmed trades (...)

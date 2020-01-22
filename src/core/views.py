@@ -153,9 +153,9 @@ def profile_inventory(request, steamID):
 
 @login_required
 def profile_update(request, steamID):
-    if (request.user.steamid == steamID and request.user.gamer.API_KEY) or request.user.is_staff:
+    if request.user.steamid == steamID or request.user.is_staff:
         the_gamer = get_object_or_404(Gamer, steamid=steamID)
-        info = getUserInfo(steamID, API_KEY=request.user.gamer.API_KEY or None)
+        info = getUserInfo(steamID)
         the_gamer.communityvisibilitystate = (True if info['communityvisibilitystate'] == 3 else False)
         the_gamer.profilestate = info['profilestate']
         the_gamer.personaname = info['personaname']

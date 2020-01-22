@@ -43,10 +43,6 @@ def imprint(request):
     return render(request, 'static_pages/imprint.html')
 
 
-def about(request):
-    return render(request, 'static_pages/about.html')
-
-
 # PUBLIC AREA
 def dashboard(request):
     return render(request, 'core/dashboard.html')

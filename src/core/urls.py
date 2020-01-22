@@ -27,7 +27,6 @@ urlpatterns = [
     # Static Pages
     path('help', views.help, name='help'),
     path('imprint', views.imprint, name='imprint'),
-    path('about', views.about, name='about'),
 
     # OpenID Redirects
     path('signup', views.signup, name='signup'),

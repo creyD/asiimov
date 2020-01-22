@@ -1,10 +1,26 @@
-{% extends 'master.html' %}
-
-{% block content %}
+{% extends 'master.html' %} {% block content %}
 <h1>Imprint</h1>
-<!-- TODO: Write paragraph -->
-<h2>GDPR</h2>
-<!-- TODO: Write paragraph -->
+
+<p>
+  This is a private open source, hobby project. If you need to contact me
+  regarding anything, you may send me an
+  <a href="mailto:joe@example.com?subject=Asiimov%20Feedback">email</a>. I will
+  try to answer it as soon as possible.
+</p>
+
+<h2>Privacy</h2>
+
+<p>
+  If you create a login on this server via OpenID (Steam Login), we store: Your
+  steamid, profile info (more in models.py > Gamer), offer_count, badges,
+  inventory and your trade url if you provide it. If you delete your profile, we
+  delete the entry from our database.
+</p>
+
 <h2>Cookies</h2>
-<!-- TODO: Write paragraph -->
+
+<p>
+  This site uses max. 2 cookies: One to store your your session id (only if you
+  are logged in) and one to store a random key used for form verification.
+</p>
 {% endblock %}

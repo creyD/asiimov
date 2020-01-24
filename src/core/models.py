@@ -19,6 +19,7 @@ BADGE_RARITIES = [
 # Storing the classes of items for quick selection in some menues
 class ItemType(models.Model):
     paint_index = models.IntegerField(primary_key=True, unique=True)  # Skin
+    wear = models.CharField(max_length=100)  # tags > category = exterior > localized_tag_name
 
     classid = models.IntegerField()  # Weapon Class
     appid = models.IntegerField()  # The appid which items of this type belong to
@@ -45,10 +46,10 @@ class ItemInstance(models.Model):
     instanceid = models.IntegerField(primary_key=True, unique=True)  # 0 for something like cases, which will be excluded here
     market_tradable_restriction = models.CharField(max_length=1, null=True)  # How long the item will be trade locked | null is not tradelocked
     inspect_link = models.URLField(max_length=512)
-    wear = models.CharField(max_length=100)  # tags > category = exterior > localized_tag_name
+
     float = models.FloatField()  # Float of the object
-    paintseed = models.IntegerField()  # Pattern ID
-    killeatervalue = models.IntegerField(null=True)  # StatTrack | null is no StatTrack
+    paintseed = models.IntegerField()  # Pattern ID | Migrate to type?
+    killeatervalue = models.IntegerField(null=True)  # StatTrack | null is no StatTrack | Migrate to type?
     customname = models.CharField(max_length=128, null=True)  # Nametag | null is no Nametag
     stickers = models.ManyToManyField(Stickers)
 
@@ -103,7 +104,7 @@ class Gamer(models.Model):
 class Offer(models.Model):
     offeror = models.ForeignKey(Gamer, on_delete=models.CASCADE)
     items_give = models.ManyToManyField(ItemInstance, related_name='OfferedItems')
-    items_want = models.ManyToManyField(ItemInstance, related_name='WantedItems')
+    items_want = models.ManyToManyField(ItemType, related_name='WantedItems')
     created_at = models.DateTimeField(auto_now_add=True)
 
 

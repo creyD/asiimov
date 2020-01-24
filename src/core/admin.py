@@ -5,7 +5,7 @@ from .models import ItemType, ItemInstance, Badge, Gamer
 # Register your models here.
 @admin.register(ItemType)
 class ItemTypeAdmin(admin.ModelAdmin):
-    list_display = ('paint_index', 'name', 'type', 'rarity', 'min_float', 'max_float', 'tradable')
+    list_display = ('paint_index', 'wear', 'name', 'type', 'rarity', 'min_float', 'max_float', 'tradable')
     list_editable = ()
 
 
@@ -16,7 +16,7 @@ class GamerAdmin(admin.ModelAdmin):
 
 @admin.register(ItemInstance)
 class ItemInstanceAdmin(admin.ModelAdmin):
-    list_display = ('item_class', 'instanceid', 'market_tradable_restriction', 'inspect_link', 'wear', 'float', 'paintseed', 'killeatervalue', 'customname')
+    list_display = ('item_class', 'instanceid', 'market_tradable_restriction', 'inspect_link', 'float', 'paintseed', 'killeatervalue', 'customname')
 
 
 @admin.register(Badge)

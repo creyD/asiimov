@@ -61,6 +61,7 @@ def updateInventory(steamID, GAME_ID=730):
                         break
                 item_class = ItemType.objects.get_or_create(
                     paint_index=item_infos['iteminfo']['paintindex'],
+                    wear=item_infos['iteminfo']['wear_name'],
                     classid=item['classid'],
                     appid=item['appid'],
                     tradable=(True if item['marketable'] == 1 else False),
@@ -78,7 +79,6 @@ def updateInventory(steamID, GAME_ID=730):
                     market_tradable_restriction=(item['owner_descriptions'][1]['value']
                                                  if 'owner_descriptions' in item else None),
                     inspect_link=instance_data['actions'][0]['link'],
-                    wear=item_infos['iteminfo']['wear_name'],
                     float=item_infos['iteminfo']['floatvalue'],
                     paintseed=item_infos['iteminfo']['paintseed'],
                     killeatervalue=(item_infos['iteminfo']['killeatervalue'] if 'killeatervalue' in item_infos['iteminfo'] else None),

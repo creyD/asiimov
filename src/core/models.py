@@ -95,7 +95,8 @@ class Gamer(models.Model):
     tradeurl = models.URLField(max_length=256, null=True)
 
     # Asiimov specific information
-    inventory = models.ManyToManyField(ItemInstance)  # Temporary storage of items for improving site performance
+    inventory = models.ManyToManyField(ItemInstance)  # For skins
+    inventory_2 = models.ManyToManyField(ItemType)  # For cases, badges usw
     badges = models.ManyToManyField(Badge)
     system_user = models.OneToOneField(User, on_delete=models.CASCADE)
     offer_count = models.IntegerField(default=0)

@@ -1,5 +1,5 @@
 # Import the local models
-from .models import Offer, Gamer
+from .models import Offer, Gamer, ItemType, ItemInstance
 # Django shortcuts for certain things
 from django.shortcuts import render, get_object_or_404, redirect
 # For catching permission errors
@@ -12,12 +12,22 @@ from urllib import parse
 import requests
 # For manually creating system users
 from django.contrib.auth.models import User
-# For getting the API interaction methods
-from .steam_api import getUserInfo, updateInventory
 # Import for manually logging in user after creation
 from django.contrib.auth import login
-
+# For communication with the steam api
+import json
+import urllib.request
 from .forms import ChangeTradeUrl, CreateOffer
+from django.conf import settings
+
+# STATIC VARIABLES
+# Official Steam Servers
+STEAM_SERVER = 'https://api.steampowered.com/'
+USER_METHOD = 'ISteamUser/GetPlayerSummaries/v2'
+INVENTORY_SERVER = 'https://steamcommunity.com/inventory/'
+
+# CSGOFloats API Server (https://csgofloat.com)
+FLOAT_SERVER = 'https://api.csgofloat.com/?url='
 
 
 # HELPER
@@ -32,6 +42,34 @@ def validate_steam_login(params):
     if "is_valid:true" in r.text:
         return True
     return False
+
+
+def getInstanceData(inventory_object, instance_id):
+    for key in inventory_object['descriptions']:
+        if key['instanceid'] == instance_id:
+            return key
+
+
+def getFloat(inspect_link):
+    QUERY = FLOAT_SERVER + inspect_link
+    print(QUERY)
+    float_object = json.load(urllib.request.urlopen(QUERY))
+    if 'error' in float_object:
+        return False
+    return float_object
+
+
+def getSubTag(scope, search_key, search_value):
+    for tag in scope:
+        if tag.search_key == search_value:
+            return tag
+    return False
+
+
+def getUserInfo(steamID, API_KEY=settings.STEAM_API_KEY):
+    QUERY = STEAM_SERVER + USER_METHOD + '/?key=' + str(API_KEY) + '&format=json&steamids=' + str(steamID)
+    player_object = json.load(urllib.request.urlopen(QUERY))
+    return player_object['response']['players'][0]
 
 
 # STATIC PAGES
@@ -73,7 +111,6 @@ def signup(request):
         'openid.return_to': 'http://' + request.META['HTTP_HOST'] + '/signup_confirm',
         'openid.realm': 'http://' + request.META['HTTP_HOST'] + ''
     }
-
     query_string = parse.urlencode(u)
     auth_url = steam_openid_url + '?' + query_string
     return redirect(auth_url)
@@ -180,7 +217,60 @@ def me_inventory(request):
 
 @login_required
 def profile_inventory_update(request, steamID):
-    updateInventory(steamID)
+    gamer = get_object_or_404(Gamer, steamid=steamID)
+    QUERY = INVENTORY_SERVER + str(steamID) + '/' + str(730) + '/2?l=english&count=5000'
+    try:
+        inventory_object = json.load(urllib.request.urlopen(QUERY))
+    except urllib.URLError:
+        print("Error accessing Steam")
+    if 'success' in inventory_object:
+        for item in inventory_object['assets']:
+            if item['instanceid'] == 0:
+                item_class = ItemType.objects.get_or_create(
+                    classid=item['classid'],
+                    appid=item['appid'],
+                    tradable=(True if item['marketable'] == 1 else False),
+                    rarity=getSubTag(item['tags'], 'category', 'Rarity').localized_tag_name
+                )
+                gamer.inventory_2.add(item_class[0])
+            else:
+                print("Getting item: " + str(item))
+                instance_data = getInstanceData(inventory_object, item['instanceid'])  # TODO Fix Bug Here
+                link = FLOAT_SERVER + instance_data['actions'][0]['link'].replace("%owner_steamid%",
+                                                                                  str(steamID)).replace("%assetid%", str(item['instanceid']))
+
+                try:
+                    item_infos = json.load(urllib.request.urlopen(link))
+                    item_class = ItemType.objects.get_or_create(
+                        paint_index=item_infos['iteminfo']['paintindex'],
+                        wear=item_infos['iteminfo']['wear_name'],
+                        classid=item['classid'],
+                        appid=item['appid'],
+                        tradable=(True if item['marketable'] == 1 else False),
+                        icon_url=item_infos['iteminfo']['imageurl'],
+                        name=item_infos['name'],
+                        name_color=item_infos['name_color'],
+                        type=item_infos['type'],
+                        rarity=getSubTag(item['tags'], 'category', 'Rarity').localized_tag_name,
+                        min_float=item_infos['iteminfo']['min'],
+                        max_float=item_infos['iteminfo']['max']
+                    )
+                    new_item, created = ItemInstance.objects.get_or_create(
+                        item_class=item_class[0],
+                        instanceid=item['instanceid'],
+                        market_tradable_restriction=(item['owner_descriptions'][1]['value']
+                                                     if 'owner_descriptions' in item else None),
+                        inspect_link=instance_data['actions'][0]['link'],
+                        float=item_infos['iteminfo']['floatvalue'],
+                        paintseed=item_infos['iteminfo']['paintseed'],
+                        killeatervalue=(item_infos['iteminfo']['killeatervalue'] if 'killeatervalue' in item_infos['iteminfo'] else None),
+                        customname=(item_infos['iteminfo']['customname'] if 'customname' in item_infos['iteminfo'] else None)
+                    )
+                    gamer.inventory.add(new_item)
+                except:
+                    print("Error Adding Item")
+    else:
+        print("STEAM API CALL NOT SUCCESSFULL!")
     return redirect(profile_inventory, steamID=steamID)
 
 

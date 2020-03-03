@@ -23,6 +23,7 @@ Additional features and goals will be tracked in this repositories issues.
 - `/offer/<offerID>` - Offer page (for each offer)
 - `/offer/<offerID>/refresh` - Refreshes offer page
 - `/profile/<steamID>` - Profile page for badges, confirmed trades (...)
+- `/profile/<steamID>/inventory` - Inventory page
 - `/profile/<steamID>/settings` - Personal settings
 - `/search/<filter>` - Offer Search/ Filter
 - `/create` - Create offer

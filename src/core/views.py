@@ -32,14 +32,14 @@ FLOAT_SERVER = 'https://api.csgofloat.com/?url='
 
 # HELPER
 def validate_steam_login(params):
-    steam_login_url_base = "https://steamcommunity.com/openid/login"
+    steam_login_url_base = 'https://steamcommunity.com/openid/login'
 
     new_params = params.copy()
-    new_params["openid.mode"] = "check_authentication"
+    new_params['openid.mode'] = 'check_authentication'
 
     r = requests.post(steam_login_url_base, data=new_params)
 
-    if "is_valid:true" in r.text:
+    if 'is_valid:true' in r.text:
         return True
     return False
 
@@ -104,9 +104,9 @@ def search(request, filter):
 def signup(request):
     steam_openid_url = 'https://steamcommunity.com/openid/login'
     u = {
-        'openid.ns': "http://specs.openid.net/auth/2.0",
-        'openid.identity': "http://specs.openid.net/auth/2.0/identifier_select",
-        'openid.claimed_id': "http://specs.openid.net/auth/2.0/identifier_select",
+        'openid.ns': 'http://specs.openid.net/auth/2.0',
+        'openid.identity': 'http://specs.openid.net/auth/2.0/identifier_select',
+        'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select',
         'openid.mode': 'checkid_setup',
         'openid.return_to': 'http://' + request.META['HTTP_HOST'] + '/signup_confirm',
         'openid.realm': 'http://' + request.META['HTTP_HOST'] + ''
@@ -222,7 +222,7 @@ def profile_inventory_update(request, steamID):
     try:
         inventory_object = json.load(urllib.request.urlopen(QUERY))
     except urllib.URLError:
-        print("Error accessing Steam")
+        print('Error accessing Steam')
     if 'success' in inventory_object:
         for item in inventory_object['assets']:
             if item['instanceid'] == 0:
@@ -234,10 +234,10 @@ def profile_inventory_update(request, steamID):
                 )
                 gamer.inventory_2.add(item_class[0])
             else:
-                print("Getting item: " + str(item))
+                print('Getting item: ' + str(item))
                 instance_data = getInstanceData(inventory_object, item['instanceid'])  # TODO Fix Bug Here
-                link = FLOAT_SERVER + instance_data['actions'][0]['link'].replace("%owner_steamid%",
-                                                                                  str(steamID)).replace("%assetid%", str(item['instanceid']))
+                link = FLOAT_SERVER + instance_data['actions'][0]['link'].replace('%owner_steamid%',
+                                                                                  str(steamID)).replace('%assetid%', str(item['instanceid']))
 
                 try:
                     item_infos = json.load(urllib.request.urlopen(link))
@@ -268,9 +268,9 @@ def profile_inventory_update(request, steamID):
                     )
                     gamer.inventory.add(new_item)
                 except:
-                    print("Error Adding Item")
+                    print('Error Adding Item')
     else:
-        print("STEAM API CALL NOT SUCCESSFULL!")
+        print('STEAM API CALL NOT SUCCESSFULL!')
     return redirect(profile_inventory, steamID=steamID)
 
 

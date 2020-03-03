@@ -79,6 +79,7 @@ class Badge(models.Model):
 # For storing user info like steamID (...)
 class Gamer(models.Model):
     steamid = models.IntegerField(primary_key=True, unique=True)  # This is a maximum of 32 chars long
+    system_user = models.OneToOneField(User, on_delete=models.CASCADE)  # System user for authentication
 
     # https://developer.valvesoftware.com/wiki/Steam_Web_API#GetPlayerSummaries_.28v0002.29
     communityvisibilitystate = models.BooleanField()  # 1 -> False, 3 -> True | Determines wether the profile is private or not
@@ -98,8 +99,8 @@ class Gamer(models.Model):
     inventory = models.ManyToManyField(ItemInstance)  # For skins
     inventory_2 = models.ManyToManyField(ItemType)  # For cases, badges usw
     badges = models.ManyToManyField(Badge)
-    system_user = models.OneToOneField(User, on_delete=models.CASCADE)
     offer_count = models.IntegerField(default=0)
+    confirmed_count = models.PositiveIntegerField(default=0)
 
 
 class Offer(models.Model):

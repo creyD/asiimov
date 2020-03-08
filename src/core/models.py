@@ -97,10 +97,10 @@ class Gamer(models.Model):
 
     # Asiimov specific information
     inventory = models.ManyToManyField(ItemInstance)  # For skins
-    inventory_2 = models.ManyToManyField(ItemType)  # For cases, badges usw
+    inventory_2 = models.ManyToManyField(ItemType)  # For cases, badges etc
     badges = models.ManyToManyField(Badge)
-    offer_count = models.IntegerField(default=0)
-    confirmed_count = models.PositiveIntegerField(default=0)
+    offer_count = models.PositiveIntegerField(default=0)  # How many offers did the user create in the past?
+    confirmed_count = models.PositiveIntegerField(default=0)  # How many confirmed trades resulted from those offers?
 
 
 class Offer(models.Model):

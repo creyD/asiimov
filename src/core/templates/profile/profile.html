@@ -14,7 +14,7 @@
   </h2>
 
   <h3>Links</h3>
-  <ul>
+  <ul style="list-style:none; text-align:center">
     <a href="{{ gamer.profileurl }}" target="_blank"><li>Steam</li></a>
     <a href="{% url 'profile_inventory' gamer.steamid %}"><li>Inventory</li></a>
     <a href="http://csgo.exchange/id/{{ gamer.steamid }}"><li>csgo.exchange</li></a>
@@ -43,6 +43,7 @@
 
   <h3>Statistics</h3>
   <p>Live Offers: <b>{{ live_offers }}</b></p>
+  <p>Confimed trades: {{ gamer.confirmed_count }}</p>
   <p>Offers created: {{ gamer.offer_count }}</p>
   <p>Asiimov Member since: {{ gamer.system_user.date_joined }}</p>
   <p>Last Asiimov Login: {{ gamer.system_user.last_login }}</p>

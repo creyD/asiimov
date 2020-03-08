@@ -61,7 +61,7 @@ def getFloat(inspect_link):
 
 def getSubTag(scope, search_key, search_value):
     for tag in scope:
-        if tag.search_key == search_value:
+        if tag[search_key] == search_value:
             return tag
     return False
 
@@ -223,52 +223,33 @@ def profile_inventory_update(request, steamID):
         inventory_object = json.load(urllib.request.urlopen(QUERY))
     except urllib.URLError:
         print('Error accessing Steam')
+
     if 'success' in inventory_object:
-        for item in inventory_object['assets']:
-            if item['instanceid'] == 0:
-                item_class = ItemType.objects.get_or_create(
+        if inventory_object['success'] == 1:
+            gamer.inventory.clear()  # Clear any old invetory data that we have
+            for count, item in enumerate(inventory_object['assets']):
+                item_desc = inventory_object['descriptions'][count]
+                wear = "NO WEAR"
+                rarity = "NO RARITY"
+                if getSubTag(item_desc['tags'], 'category', 'Exterior'):
+                    wear = getSubTag(item_desc['tags'], 'category', 'Exterior')['localized_tag_name']
+                if getSubTag(item_desc['tags'], 'category', 'Rarity'):
+                    rarity = getSubTag(item_desc['tags'], 'category', 'Rarity')['localized_tag_name']
+                new_item, created = ItemType.objects.get_or_create(
+                    paint_index=item_infos['iteminfo']['paintindex'],
+                    wear=wear,
                     classid=item['classid'],
                     appid=item['appid'],
-                    tradable=(True if item['marketable'] == 1 else False),
-                    rarity=getSubTag(item['tags'], 'category', 'Rarity').localized_tag_name
+                    tradable=(True if 'marketable' in item else False),
+                    icon_url=item_desc['icon_url'],
+                    name=item_desc['name'],
+                    name_color=item_desc['name_color'],
+                    type=item_desc['type'],
+                    rarity=rarity,
                 )
-                gamer.inventory_2.add(item_class[0])
-            else:
-                print('Getting item: ' + str(item))
-                instance_data = getInstanceData(inventory_object, item['instanceid'])  # TODO Fix Bug Here
-                link = FLOAT_SERVER + instance_data['actions'][0]['link'].replace('%owner_steamid%',
-                                                                                  str(steamID)).replace('%assetid%', str(item['instanceid']))
-
-                try:
-                    item_infos = json.load(urllib.request.urlopen(link))
-                    item_class = ItemType.objects.get_or_create(
-                        paint_index=item_infos['iteminfo']['paintindex'],
-                        wear=item_infos['iteminfo']['wear_name'],
-                        classid=item['classid'],
-                        appid=item['appid'],
-                        tradable=(True if item['marketable'] == 1 else False),
-                        icon_url=item_infos['iteminfo']['imageurl'],
-                        name=item_infos['name'],
-                        name_color=item_infos['name_color'],
-                        type=item_infos['type'],
-                        rarity=getSubTag(item['tags'], 'category', 'Rarity').localized_tag_name,
-                        min_float=item_infos['iteminfo']['min'],
-                        max_float=item_infos['iteminfo']['max']
-                    )
-                    new_item, created = ItemInstance.objects.get_or_create(
-                        item_class=item_class[0],
-                        instanceid=item['instanceid'],
-                        market_tradable_restriction=(item['owner_descriptions'][1]['value']
-                                                     if 'owner_descriptions' in item else None),
-                        inspect_link=instance_data['actions'][0]['link'],
-                        float=item_infos['iteminfo']['floatvalue'],
-                        paintseed=item_infos['iteminfo']['paintseed'],
-                        killeatervalue=(item_infos['iteminfo']['killeatervalue'] if 'killeatervalue' in item_infos['iteminfo'] else None),
-                        customname=(item_infos['iteminfo']['customname'] if 'customname' in item_infos['iteminfo'] else None)
-                    )
-                    gamer.inventory.add(new_item)
-                except:
-                    print('Error Adding Item')
+                gamer.inventory_2.add(new_item)
+        else:
+            print('STEAM API CALL RETURNED SUCESS !=1!')
     else:
         print('STEAM API CALL NOT SUCCESSFULL!')
     return redirect(profile_inventory, steamID=steamID)

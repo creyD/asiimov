@@ -1,4 +1,10 @@
-# Asiimov
+# Asiimov (ON HOLD)
+
+**Note: This project is currently on hold as I couldn't find a reliable API for the Steam inventory.
+Valve itself doesn't provide one and most of the APIs out there work by getting the original Website
+and converting it, which isn't very reliable as this would depend on Valve never changing the site.**
+
+**Note 2: If somebody still would like to take the time to finish this, they may contact me.**
 
 A free, intuitive, open source CS:GO item trading platform.
 
@@ -12,7 +18,7 @@ A free, intuitive, open source CS:GO item trading platform.
 - You can send trade offers (preferably with the items preselected or even completely automated)
 - You have a profile with some badges to get your profile semi verified (email, trade link...)
 - Everything is available for free
-- Items should be displayed with: Item ID, Inspect Link, Pattern Index (...) NO PRICES! We don't want to anger Valve!
+- Items should be displayed with: Item ID, Inspect Link, Pattern Index (...) NO PRICES!
 - Simple user design, minimalistic, less pages more features
 - (optional) You can mark your inventory items as "for trade" or "holding on to this"
 

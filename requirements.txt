@@ -6,4 +6,4 @@ idna==2.8
 pytz==2019.3
 requests==2.31.0
 sqlparse==0.4.4
-urllib3==1.26.5
+urllib3==1.26.17
